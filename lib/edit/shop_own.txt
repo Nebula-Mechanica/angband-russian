@@ -1,0 +1,99 @@
+# File: shop_own.txt
+
+
+# This file is used to initialize the "lib/data/shop_own.raw" file, which is
+# used to initialize the "shop owner" information for the Angband game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+# After modifying this file, delete the "lib/data/shop_own.raw" file.
+
+
+# Format:
+# N:store:owner idx:owner name
+# I:race idx:purse:greed
+
+
+# Version stamp (required)
+
+V:3.0.5
+
+# General Store
+N:0:0:Бильбо Щедрый
+I:3:5000:108
+N:0:1:Ринсвид Трусливый
+I:0:10000:108
+N:0:2:Снафу Карлик
+I:4:20000:107
+N:0:3:Лиар-Эль Уступчивый
+I:2:30000:107
+
+# Armoury
+N:1:0:Кон-Дар Уродливый
+I:6:5000:115
+N:1:1:Дарг-Лоу Угрюмый
+I:0:10000:111
+N:1:2:Декадо Красивый
+I:8:25000:112
+N:1:3:Мауглин Ворчливый
+I:5:30000:112
+
+# Weapon Smith
+N:2:0:Итил-Мак Звериный
+I:7:5000:115
+N:2:1:Арндал Победитель Зверей
+I:1:10000:110
+N:2:2:Тарл Повелитель Зверей
+I:3:25000:115
+N:2:3:Оглигн Победитель Драконов
+I:5:30000:112
+
+# Temple
+N:3:0:Людвиг Скромный
+I:0:15000:109
+N:3:1:Гуннар Паладин
+I:0:20000:110
+N:3:2:Делайла Чистый
+I:2:25000:107
+N:3:3:Боск Мудрый
+I:5:30000:109
+
+# Alchemist
+N:4:0:Маузер Химик
+I:1:10000:111
+N:4:1:Виззле Хаотический
+I:3:10000:110
+N:4:2:Га-Нат Жадный
+I:4:15000:116
+N:4:3:Велла Веселый
+I:0:15000:111
+
+# Magic Shop
+N:5:0:Ариэль Колдунья
+I:1:15000:110
+N:5:1:Баггерби Великий
+I:4:20000:113
+N:5:2:Инглориан Маг
+I:0:25000:110:
+N:5:3:Лучиэнь Звездный Свет
+I:9:30000:110:
+
+# Black Market
+N:6:0:Ло-Хак Ужасный
+I:7:15000:150
+N:6:1:Хистор Гоблин
+I:10:20000:150
+N:6:2:Дарвин Упрямый
+I:6:25000:150
+N:6:3:Драго Честный
+I:2:30000:150
+
+# Home
+N:7:0:Ваш дом
+I:99:0:100
+N:7:1:Ваш дом
+I:99:0:100
+N:7:2:Ваш дом
+I:99:0:100
+N:7:3:Ваш дом
+I:99:0:100

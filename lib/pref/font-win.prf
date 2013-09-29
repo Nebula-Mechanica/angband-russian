@@ -1,0 +1,58 @@
+# File: font-win.prf
+
+#
+# This file is used by Angband (when it was compiled using "main-win.c")
+# to specify simple attr/char remappings using a standard font, allowing
+# the use of special pseudo-graphic pictures for walls and such.
+#
+# Note that this file is extremely similar to the "font-ibm.prf" file,
+# but it uses different codes, since it uses the special pseudo-graphic
+# symbols defined in the "lib/xtra/font/*.FON" files, and there is only
+# one special wall type, so we have to use special "colors".
+#
+
+
+### Terrain features ###
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=# begin Feature attr/chars
+# *Warning!*  The lines below are an automatic dump.
+# Don't edit them; changes will be deleted and replaced automatically.
+
+
+# Feature attr/char definitions
+
+
+# пол
+F:1:1/31
+
+# магматическая жила
+F:50:2/2
+# кварцевая жила
+F:51:9/2
+# магматическая жила
+F:52:2/2
+# кварцевая жила
+F:53:9/2
+# магматическая жила с сокровищем
+F:54:3/1
+# кварцевая жила с сокровищем
+F:55:3/1
+# гранитная стена
+F:56:1/2
+# гранитная стена
+F:57:1/2
+# гранитная стена
+F:58:1/2
+# гранитная стена
+F:59:1/2
+# постоянная стена
+F:60:1/2
+# постоянная стена
+F:61:1/2
+# постоянная стена
+F:62:1/2
+# постоянная стена
+F:63:1/2
+
+
+
+

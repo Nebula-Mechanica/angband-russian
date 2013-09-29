@@ -1,0 +1,995 @@
+# File: ego_item.txt
+
+
+# This file is used to initialize the "lib/data/ego_item.raw" file, which is
+# used to initialize the "ego-item" information for the Angband game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+# After modifying this file, delete the "lib/data/ego_item.raw" file.
+
+# The ego-item indexes are defined in "defines.h", and must not be changed
+# or savefile compatibility will be lost.
+
+# Note that several "ego-item" types may share the same "textual name",
+# such as with "Armor of Resistance" and "Shield of Resistance".
+
+# === Understanding ego_item.txt ===
+
+# N: serial number : ego type
+# X: rating : xtra
+# C: max to-hit : max to-dam : max to-ac : pval
+# W: depth : rarity : weight : cost
+# T: tval : min_sval : max_sval
+# F: flag | flag | etc
+
+# 'N' indicates the beginning of an entry. The serial number must
+# increase for each new item.
+
+# 'X' is for extra information - Rating affects level feelings.
+# The xtra value determines random extra flags for the ego-item.
+# Nothing happens with a value of 0, 1 stands for "one random extra
+# sustain", 2 is "one random extra resist", and 3 is "one random
+# extra ability".
+
+# 'C' is for creation bonusses - maximum to-hit, to-dam, to-ac, and
+# pval. Cursed ego-items will negate the given value.
+
+# 'W' is for extra information. Depth is the depth the object is
+# normally found at, rarity determines how common the object is,
+# weight is in tenth-pounds and cost is the items value.
+
+# 'F' is for flags. These are fairly self-explanatory. As many F:
+# lines may be used as are needed to specify all the flags and flags
+# are separated by the '|' symbol.
+
+# 'T' is for possible 'tval' and 'sval' values of the base-item.
+# Up to three 'T' entries are possible for a single object. The
+# ego-item can only be generated from items of this tval, with sval
+# in the specified range.
+
+
+# Version stamp (required)
+
+V:3.0.5
+
+# 1 (unused)
+
+# 2 (unused)
+
+# 3 (unused)
+
+### Body Armor ###
+
+N:4:Кислотоупорности
+X:16:0
+W:0:1:0:1000
+T:36:0:99
+T:37:0:99
+F:RES_ACID | IGNORE_ACID
+
+N:5:Электроизоляции
+X:10:0
+W:0:1:0:400
+T:36:0:99
+T:37:0:99
+F:RES_ELEC | IGNORE_ELEC
+
+N:6:Огнеупорности
+X:14:0
+W:0:1:0:800
+T:36:0:99
+T:37:0:99
+F:RES_FIRE | IGNORE_FIRE
+
+N:7:Хладостойкости
+X:12:0
+W:0:1:0:600
+T:36:0:99
+T:37:0:99
+F:RES_COLD | IGNORE_COLD
+
+N:8:Сопротивления
+X:20:0
+W:0:2:0:12500
+C:0:0:10:0
+T:36:0:99
+T:37:0:99
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:9:Эльфов
+X:25:2
+W:0:4:0:15000
+C:0:0:10:3
+T:36:0:99
+T:37:0:99
+F:STEALTH |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:10:Уязвимости
+X:0:0
+W:0:2:0:0
+C:0:0:50:0
+T:36:0:99
+T:37:0:99
+F:AGGRAVATE | LIGHT_CURSE
+
+### Robes only ###
+
+N:11:Постоянства
+X:30:2
+W:0:4:0:30000
+C:0:0:20:0
+T:36:2:2
+F:SUST_STR | SUST_DEX | SUST_CON | SUST_INT | SUST_WIS | SUST_CHR |
+F:HOLD_LIFE | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+### Heavy metal armor only, not rusty ###
+
+N:12:Гномов
+X:18:0
+W:0:2:0:5000
+C:0:0:15:2
+T:37:3:99
+F:IGNORE_ACID | IGNORE_FIRE |
+F:FREE_ACT |
+F:STR | CON | INFRA | HIDE_TYPE |
+
+# 13 (unused)
+
+# 14 (unused)
+
+# 15 (unused)
+
+
+### Shields ###
+
+N:16:Кислотоупорности
+X:16:0
+W:0:1:0:1000
+T:34:0:99
+F:RES_ACID | IGNORE_ACID
+
+N:17:Электроизоляции
+X:10:0
+W:0:1:0:400
+T:34:0:99
+F:RES_ELEC | IGNORE_ELEC
+
+N:18:Огнеупорности
+X:14:0
+W:0:1:0:800
+T:34:0:99
+F:RES_FIRE | IGNORE_FIRE
+
+N:19:Хладостойкости
+X:12:0
+W:0:1:0:600
+T:34:0:99
+F:RES_COLD | IGNORE_COLD
+
+N:20:Сопротивления
+X:20:0
+W:0:2:0:12500
+C:0:0:10:0
+T:34:0:99
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:21:Эльфов
+X:25:2
+W:0:4:0:18000
+C:0:0:10:3
+T:34:0:99
+F:STEALTH |
+F:RES_FIRE | RES_COLD | RES_ACID | RES_ELEC |
+F:IGNORE_ACID | IGNORE_FIRE | IGNORE_COLD | IGNORE_ELEC
+
+N:22:Сохранения
+X:25:2
+W:60:4:0:24000
+C:0:0:20:0
+T:34:0:99
+F:RES_DISEN | SUST_STR | SUST_CON | SUST_DEX | HOLD_LIFE |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:23:Уязвимости
+X:0:0
+W:0:2:0:0
+C:0:0:50:0
+T:34:0:99
+F:AGGRAVATE | LIGHT_CURSE
+
+
+### Crowns and Helms ###
+
+N:24:Интеллекта
+X:13:0
+C:0:0:0:2
+W:0:2:0:500
+T:32:0:99
+F:INT | SUST_INT
+
+N:25:Мудрости
+X:13:0
+W:0:2:0:500
+C:0:0:0:2
+T:32:0:99
+F:WIS | SUST_WIS
+
+N:26:Красоты
+X:8:0
+W:0:2:0:1000
+C:0:0:0:4
+T:32:0:99
+F:CHR | SUST_CHR
+
+N:27:Магов
+X:15:3
+W:0:4:0:7500
+C:0:0:0:3
+T:33:0:99
+F:INT | SUST_INT |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:28:Силы
+X:19:0
+W:0:4:0:7500
+C:0:0:0:3
+T:33:0:99
+F:STR | DEX | CON | SUST_STR | SUST_DEX | SUST_CON | FREE_ACT
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:29:Величия
+X:17:3
+W:0:2:0:7500
+C:0:0:0:3
+T:33:0:99
+F:WIS | CHR | SUST_WIS | SUST_CHR | RES_FEAR
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:30:Зрения
+X:8:0
+W:0:2:0:2000
+C:0:0:0:5
+T:33:0:99
+T:32:0:99
+F:SEARCH | RES_BLIND | SEE_INVIS
+
+N:31:Инфразрения
+X:11:0
+W:0:2:0:500
+C:0:0:0:5
+T:32:0:99
+F:INFRA | HIDE_TYPE
+
+N:32:Света
+X:6:0
+W:0:2:0:1000
+T:32:0:99
+F:LITE | RES_LITE
+
+N:33:Телепатии
+X:20:0
+W:0:6:0:50000
+T:32:0:99
+T:33:0:99
+F:TELEPATHY
+
+N:34:Регенерации
+X:10:0
+W:0:4:0:1500
+T:32:0:99
+T:33:0:99
+F:REGEN
+
+N:35:Телепортации
+X:0:0
+W:0:2:0:0
+T:32:0:99
+F:TELEPORT | LIGHT_CURSE
+
+N:36:Ясности
+X:20:0
+W:0:6:0:4000
+T:33:0:99
+F:RES_SOUND | RES_CONFU | RES_FEAR
+
+N:37:Дня и Ночи
+X:18:0
+W:35:6:0:4000
+T:33:0:99
+F:RES_LITE | RES_DARK | LITE | SEE_INVIS | RES_BLIND | IGNORE_ACID
+
+N:38:Скуки
+X:0:0
+C:0:0:0:5
+W:0:2:0:0
+T:32:0:99
+T:33:0:99
+F:INT | WIS | CHR | LIGHT_CURSE
+
+N:39:Болезненности
+X:0:0
+C:0:0:0:5
+W:0:2:0:0
+T:33:0:99
+F:STR | DEX | CON | LIGHT_CURSE
+
+
+### Cloaks ###
+
+N:40:Защиты
+X:10:0
+W:0:2:0:1500
+C:0:0:10:0
+T:35:0:99
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | RES_SHARD
+
+N:41:Скрытности
+X:10:0
+W:0:1:0:500
+C:0:0:0:3
+T:35:0:99
+F:STEALTH
+
+N:42:Амана
+X:20:2
+W:0:6:0:4000
+C:0:0:20:3
+T:35:0:99
+F:STEALTH |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:43:Магов
+X:15:3
+W:30:3:0:2000
+C:0:0:4:2
+T:35:0:99
+F:INT | SUST_INT | STEALTH | HIDE_TYPE | IGNORE_ACID
+
+N:44:Обворачивания
+X:0:0
+W:0:1:0:0
+C:10:10:0:0
+T:35:0:99
+F:SHOW_MODS | LIGHT_CURSE
+
+N:45:Уязвимости
+X:0:0
+W:0:1:0:0
+C:0:0:50:0
+T:35:0:99
+F:AGGRAVATE | LIGHT_CURSE
+
+N:46:Раздражения
+X:0:0
+W:0:1:0:0
+C:15:15:0:0
+T:35:0:99
+F:AGGRAVATE | SHOW_MODS | LIGHT_CURSE
+
+# 47 (unused)
+
+### Gloves ###
+
+N:48:Свободных Действий
+X:11:0
+F:FREE_ACT
+W:0:4:0:1000
+T:31:0:99
+
+N:49:Истребления
+X:17:0
+W:0:4:0:1500
+C:5:5:0:0
+F:SHOW_MODS
+T:31:0:99
+# "Она" = "пара перчаток..."
+D:Она повышает бонусы к удару и к урону.
+
+N:50:Ловкости
+X:14:0
+W:0:6:0:1000
+C:0:0:0:5
+T:31:0:99
+F:DEX | HIDE_TYPE
+
+N:51:Силы
+X:22:0
+W:0:6:0:2500
+C:5:5:0:5
+T:31:0:99
+F:STR | SHOW_MODS | HIDE_TYPE
+
+N:52:Воровства
+X:22:0
+W:40:12:0:5000
+C:8:3:0:5
+T:31:1:1
+F:DEX | SEARCH | SHOW_MODS | FEATHER | FREE_ACT | HIDE_TYPE
+
+N:53:Боя
+X:22:0
+W:50:12:0:7000
+C:3:8:0:2
+T:31:2:99
+F:STR | CON | SHOW_MODS | AGGRAVATE | HIDE_TYPE
+
+N:54:Слабости
+X:0:0
+W:0:2:0:0
+C:0:0:0:10
+T:31:0:99
+F:STR | LIGHT_CURSE | HIDE_TYPE
+
+N:55:Неуклюжести
+X:0:0
+W:0:2:0:0
+C:0:0:0:10
+T:31:0:99
+F:DEX | LIGHT_CURSE | HIDE_TYPE
+
+
+### Boots ###
+
+N:56:Медленного Падения
+X:7:0
+W:0:5:0:250
+T:30:0:99
+F:FEATHER
+
+N:57:Скрытности
+X:16:0
+W:0:6:0:500
+C:0:0:0:3
+T:30:0:99
+F:STEALTH | HIDE_TYPE
+
+N:58:Свободных Действий
+X:15:0
+W:0:8:0:1000
+F:FREE_ACT
+T:30:0:99
+
+N:59:Скорости
+X:25:0
+W:0:24:0:100000
+C:0:0:0:10
+T:30:0:99
+F:SPEED | HIDE_TYPE
+
+N:60:Стабильности
+X:20:0
+W:0:10:0:5000
+T:30:0:99
+F:RES_NEXUS | FEATHER
+
+N:61:Эльфов
+X:30:0
+W:60:30:0:200000
+C:0:0:0:5
+T:30:2:3
+F:STEALTH | SPEED | HIDE_TYPE | FEATHER | IGNORE_ACID | IGNORE_FIRE
+
+N:62:Медлительности
+X:0:0
+W:0:5:0:0
+C:0:0:0:5
+F:SPEED | LIGHT_CURSE | HIDE_TYPE
+T:30:0:99
+
+N:63:Раздражения
+X:0:0
+W:0:10:0:0
+C:0:0:0:10
+F:SPEED | STEALTH | AGGRAVATE | LIGHT_CURSE | HIDE_TYPE
+T:30:0:99
+
+
+### Weapons ###
+
+N:64:(Священный Мститель)
+X:30:1
+W:0:12:0:20000
+C:6:6:4:4
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:WIS |
+F:SLAY_EVIL | SLAY_UNDEAD | SLAY_DEMON |
+F:SEE_INVIS | BLESSED | RES_FEAR
+
+N:65:(Защитник)
+X:25:1
+W:0:12:0:15000
+C:4:4:8:4
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:STEALTH | FREE_ACT | SEE_INVIS | FEATHER | REGEN |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:66:(Благословленное)
+X:20:3
+W:0:10:0:5000
+C:0:0:0:3
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:WIS | BLESSED
+
+N:67:Гондолина
+X:30:3
+W:30:20:0:25000
+C:7:7:0:0
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_DEMON | SLAY_ORC | SLAY_TROLL | SLAY_DRAGON |
+F:LITE | RES_DARK | SEE_INVIS | FREE_ACT |
+F:IGNORE_ACID | IGNORE_FIRE
+
+N:68:Вестерноса
+X:20:0
+W:0:10:0:20000
+C:5:5:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:STR | DEX | CON |
+F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
+F:FREE_ACT | SEE_INVIS
+
+N:69:Дополнительных Атак
+X:20:0
+W:0:10:0:10000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:BLOWS | HIDE_TYPE
+
+N:70:Ярости
+X:30:0
+W:40:20:0:20000
+T:21:12:99
+T:22:10:99
+T:23:16:99
+C:10:10:0:2
+F:STR | BLOWS | AGGRAVATE | RES_FEAR | HIDE_TYPE |
+F:IGNORE_ACID | IGNORE_FIRE
+
+# 71 (unused)
+
+# The "Branded" weapons (5)
+
+N:72:Кислоты
+X:20:0
+W:0:10:0:5000
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:BRAND_ACID | RES_ACID | IGNORE_ACID
+
+N:73:Молнии
+X:20:0
+W:0:10:0:4500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:BRAND_ELEC | RES_ELEC | IGNORE_ELEC
+
+N:74:Пламени
+X:15:0
+W:0:8:0:3500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:BRAND_FIRE | RES_FIRE | IGNORE_FIRE
+
+N:75:Мороза
+X:15:0
+W:0:8:0:3000
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:BRAND_COLD | RES_COLD | IGNORE_COLD
+
+N:76:Яда
+X:15:0
+W:0:8:0:4000
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:BRAND_POIS
+
+# 77 (unused)
+
+# 78 (unused)
+
+# 79 (unused)
+
+# The "Slay" weapons (8)
+
+N:80:Истребления Животных
+X:18:0
+W:0:6:0:3000
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_ANIMAL
+
+N:81:Истребления Зла
+X:18:0
+W:0:6:0:3000
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_EVIL
+
+N:82:Истребления Мертвецов
+X:18:0
+W:0:6:0:3500
+T:21:0:18
+T:22:0:99
+T:23:0:99
+F:SLAY_UNDEAD
+
+N:83:Истребления Демонов
+X:14:0
+W:0:6:0:3500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_DEMON
+
+N:84:Истребления Орков
+X:10:0
+W:0:6:0:2500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_ORC
+
+N:85:Истребления Троллей
+X:10:0
+W:0:6:0:2500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_TROLL
+
+N:86:Истребления Гигантов
+X:14:0
+W:0:6:0:2500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_GIANT
+
+N:87:Истребления Драконов
+X:18:0
+W:0:6:0:3500
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SLAY_DRAGON
+
+# The *Slay* weapons (8)
+
+N:88:Уничтожения Животных
+X:20:0
+W:0:20:0:6000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:INT | SLAY_ANIMAL | SLOW_DIGEST
+
+N:89:Уничтожения Зла
+X:20:3
+W:0:20:0:5000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:WIS | SLAY_EVIL | BLESSED
+
+N:90:Уничтожения Мертвецов
+X:24:0
+W:0:20:0:8000
+C:0:0:0:2
+T:21:0:18
+T:22:0:99
+T:23:0:99
+F:KILL_UNDEAD | WIS | SEE_INVIS
+
+N:91:Уничтожения Демонов
+X:16:0
+W:0:20:0:8000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:KILL_DEMON | INT | RES_FIRE
+
+N:92:Уничтожения Орков
+X:14:0
+W:0:20:0:4000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:DEX | SLAY_ORC | SUST_DEX
+
+N:93:Уничтожения Троллей
+X:14:0
+W:0:20:0:4000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:STR | SLAY_TROLL | REGEN
+
+N:94:Уничтожения Гигантов
+X:16:0
+W:0:20:0:4000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:STR | SLAY_GIANT | SUST_STR
+
+N:95:Уничтожения Драконов
+X:24:0
+W:0:20:0:8000
+C:0:0:0:2
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:CON | KILL_DRAGON | RES_FEAR
+
+# 96 (unused)
+
+# 97 (unused)
+
+# 98 (unused)
+
+# 99 (unused)
+
+### Digging Tools
+
+N:100:Копания
+X:4:0
+W:0:1:0:500
+C:0:0:0:4
+T:20:0:99
+F:TUNNEL | BRAND_ACID
+
+N:101:Землетрясений
+X:8:0
+W:20:4:0:3000
+C:10:10:0:6
+T:20:0:99
+F:STR | TUNNEL | BRAND_ACID | IMPACT | HIDE_TYPE
+
+### Cursed Weapons
+
+N:102:Моргула
+X:0:0
+W:0:5:0:1
+C:0:0:0:0
+T:21:0:99
+T:22:0:99
+T:23:0:99
+F:SEE_INVIS | AGGRAVATE | HEAVY_CURSE | LIGHT_CURSE |
+F:HOLD_LIFE | DRAIN_EXP | SLAY_UNDEAD | BRAND_POIS
+
+# 103 (unused)
+
+
+### Missile Launchers ###
+
+N:104:Меткости
+X:10:0
+W:0:1:0:1000
+C:15:5:0:0
+T:19:0:99
+D:Он не имеет особых возможностей, но его бонус к удару может
+D: быть необычно высок.
+
+N:105:Силы
+X:10:0
+W:0:1:0:1000
+C:5:15:0:0
+T:19:0:99
+D:Он не имеет особых возможностей, но его бонус к урону может
+D: быть необычно высок.
+
+N:106:Лотлориэна
+X:30:3
+W:50:4:0:20000
+C:10:10:0:2
+T:19:12:13
+F:DEX | MIGHT | FREE_ACT | IGNORE_ACID | IGNORE_FIRE | HIDE_TYPE
+
+N:107:Харадрима
+X:30:0
+W:50:4:0:20000
+C:5:5:0:1
+T:19:23:23
+F:MIGHT | SHOTS | IGNORE_ACID | IGNORE_FIRE | HIDE_TYPE
+
+N:108:Силы Стрельбы
+X:20:0
+W:0:2:0:10000
+C:5:10:0:1
+F:MIGHT | HIDE_TYPE
+T:19:0:99
+
+N:109:Скорости Стрельбы
+X:20:0
+W:0:2:0:10000
+C:10:5:0:1
+F:SHOTS | HIDE_TYPE
+T:19:0:99
+
+N:110:Бэклэнда
+X:25:0
+W:40:4:0:20000
+C:8:8:0:2
+T:19:2:2
+F:DEX | SHOTS | MIGHT | IGNORE_ACID | IGNORE_FIRE | HIDE_TYPE
+
+N:111:Назгулов
+X:0:0
+W:0:2:0:0
+C:10:10:0:0
+T:19:0:99
+F:LIGHT_CURSE | DRAIN_EXP | SEE_INVIS
+
+
+### Ammo ###
+
+N:112:Истребления Животных
+X:10:0
+W:0:6:0:20
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:SLAY_ANIMAL
+
+N:113:Истребления Зла
+X:10:0
+W:0:6:0:20
+T:16:0:2
+T:17:0:2
+T:18:0:2
+F:SLAY_EVIL
+
+N:114:Истребления Мертвецов
+X:10:0
+W:0:8:0:25
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:SLAY_UNDEAD
+
+N:115:Истребления Демонов
+X:10:0
+W:0:8:0:25
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:SLAY_DEMON
+
+N:116:Кислоты
+X:10:0
+W:0:9:0:50
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:BRAND_ACID | IGNORE_ACID
+
+N:117:Молнии
+X:10:0
+W:0:9:0:45
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:BRAND_ELEC | IGNORE_ELEC
+
+N:118:Истребления Гигантов
+X:10:0
+W:0:8:0:25
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:SLAY_GIANT
+
+N:119:Истребления Драконов
+X:10:0
+W:0:8:0:40
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:SLAY_DRAGON
+
+N:120:Священной Силы
+X:20:0
+W:40:15:0:60
+C:10:10:0:0
+T:16:2:99
+T:17:2:99
+T:18:2:99
+F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD
+F:IGNORE_FIRE | IGNORE_ACID
+
+N:121:Яда
+X:10:0
+W:0:6:0:40
+T:16:0:2
+T:17:0:2
+T:18:0:2
+F:BRAND_POIS
+
+N:122:Пламени
+X:10:0
+F:BRAND_FIRE | IGNORE_FIRE
+W:0:6:0:35
+T:16:0:99
+T:17:0:99
+T:18:0:99
+
+N:123:Мороза
+X:10:0
+F:BRAND_COLD | IGNORE_COLD
+W:0:6:0:30
+T:16:0:99
+T:17:0:99
+T:18:0:99
+
+N:124:Ранения
+X:5:0
+W:0:4:0:20
+C:5:5:0:0
+T:16:0:99
+T:17:0:99
+T:18:0:99
+D:Они не имеют особых возможностей, но их бонусы к удару и к урону
+D: могут быть необычно высоки.
+
+# Backbiting
+N:125:Промахов
+X:0:0
+W:0:1:0:0
+C:50:50:0:0
+T:16:0:99
+T:17:0:99
+T:18:0:99
+F:LIGHT_CURSE
+
+### Special Broken Items ###
+
+# these won't be generated by the make_ego_item code as long as
+# they keep their rarity of 0 and nobody adds 'T' lines for them.
+
+# Destroyed Weapon
+N:126:(Сломано)
+X:0:0
+W:0:0:0:0
+C:5:5:0:0
+
+# Destroyed Body Armor
+
+N:127:(Разбито)
+X:0:0
+W:0:0:0:0
+C:0:0:10:0
+

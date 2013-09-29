@@ -1,0 +1,810 @@
+# File: Makefile.mpw
+
+# Copyright (c) 1997--2003 Ben Harrison, Robert Ruehlmann and others.
+#
+# This software may be copied and distributed for educational, research,
+# and not for profit purposes provided that this copyright and statement
+# are included in all such copies.
+#
+# This file is also available under the GNU General Public License.
+# Please obtain a copy from Free Software Foundation for detailed terms
+# and conditions.
+
+# This is an MPW Makefile to compile Angband 3.0.x for
+# - PPC-based Macintosh computers running Mac OS (System 7 -- OS 9.2).
+#   It still works on OS X, in the Classic environment, but there is
+#   an separate Makefile available for gcc compilation that will
+#   produce an OS X native binary.
+# - 68K based Macintosh computers running System 7 or greater,
+#   or any PPC Macs (it works even on OS X, in the Classic
+#   environment, if you wish to do so).
+#
+# As you can see, part of the reason why this file is so complicated
+# is that Mac compilation often means multiple targets, with
+# cross-compiling to different architectures.  MPW Make somewhat lacks
+# in expressiveness, but it is a minor problem when we compare it with
+# the complexity of the targets.
+#
+# This makefile should work with any main-mac.c if it supports
+# Angband 3.0.x and Angband.r contains right set of resource
+# definitions.
+
+Makefile = 'Makefile.mpw'
+VersionName = Angband
+
+# Carbon target is not suported by almost all main-mac.c, but included
+# here for your reference
+AngbandPPC = "{VersionName} (PPC)"
+AngbandCarb = "{VersionName} (Carbon)"
+Angband68K = "{VersionName} (68K)"
+
+# Tolua also needs a high-level target, because it has to have a Makefile
+# generated.
+ToLua = ToLua
+
+# Artificial default target depending on other artificial ones
+All Ä SetUpDirs ToLuaTool Angband68K AngbandPPC
+
+# Use one of these if you aren't interested in the other architecture.
+OnlyPPC Ä SetUpDirs ToLuaTool AngbandPPC
+OnlyCarb Ä SetUpDirs ToLuaTool AngbandCarb
+Only68K Ä SetUpDirs ToLuaTool Angband68K
+
+##
+## Source code and object files
+##
+
+# Textual description (in the Rez format) of menus, dialogues and icons
+Resources = Angband.r
+
+# Graphics and sound data
+Sounds = AngSound.rsrc
+Tiles_Original = 8x8.rsrc
+Tiles_Adam_Bolt = 16x16.rsrc
+
+# ObjDir is set by low level targets
+SrcDir = :
+ObjDir =
+ObjDir68K = {SrcDir}obj-68k:
+ObjDirPPC = {SrcDir}obj-ppc:
+ObjDirCarb = {SrcDir}obj-crb:
+ObjDirMPW = {SrcDir}obj-mpw:
+
+SetUpDirs Ä $OutOfDate
+	For d in {ObjDir68K} {ObjDirPPC} {ObjDirMPW}
+	  If Not "`Exists -d {d}`"
+	    NewFolder {d}
+	  End
+	End
+
+Sources2 = ¶
+	:lua:lapi.c :lua:ldebug.c :lua:lmem.c :lua:lstrlib.c ¶
+	:lua:lvm.c :lua:tolua_lb.c :lua:lauxlib.c :lua:ldo.c ¶
+	:lua:lobject.c :lua:ltable.c :lua:lzio.c :lua:tolua_rg.c ¶
+	:lua:lbaselib.c :lua:lfunc.c :lua:lparser.c ¶
+	:lua:tolua_bd.c :lua:tolua_tm.c :lua:lcode.c :lua:lgc.c ¶
+	:lua:lstate.c :lua:ltm.c :lua:tolua_eh.c :lua:tolua_tt.c ¶
+	:lua:ldblib.c :lua:llex.c :lua:lstring.c :lua:lundump.c ¶
+	:lua:tolua_gp.c
+
+Sources1 = ¶
+	tables.c variable.c ¶
+	z-rand.c z-virt.c z-util.c z-form.c z-term.c ¶
+	{Sources2} ¶
+	l-monst.c l-object.c l-player.c l-random.c l-ui.c ¶
+	l-misc.c l-spell.c ¶
+	randart.c script.c util.c cave.c dungeon.c ¶
+	melee1.c melee2.c ¶
+	xtra1.c xtra2.c ¶
+	object1.c object2.c obj-info.c ¶
+	monster1.c monster2.c ¶
+	spells1.c spells2.c ¶
+	files.c save.c ¶
+	cmd1.c cmd2.c cmd3.c cmd4.c cmd5.c cmd6.c ¶
+	use-obj.c x-spell.c ¶
+	generate.c store.c wizard2.c ¶
+	init2.c load.c birth.c init1.c wizard1.c
+
+Sources = main-mac.c {Sources1}
+SourcesCarb = main-crb.c {Sources1}
+
+Objects2 = ¶
+	{ObjDir}lapi.c.o {ObjDir}ldebug.c.o {ObjDir}lmem.c.o ¶
+	{ObjDir}lstrlib.c.o {ObjDir}lvm.c.o {ObjDir}tolua_lb.c.o ¶
+	{ObjDir}lauxlib.c.o {ObjDir}ldo.c.o {ObjDir}lobject.c.o ¶
+	{ObjDir}ltable.c.o {ObjDir}lzio.c.o {ObjDir}tolua_rg.c.o ¶
+	{ObjDir}lbaselib.c.o {ObjDir}lfunc.c.o {ObjDir}lparser.c.o ¶
+	{ObjDir}tolua_bd.c.o {ObjDir}tolua_tm.c.o {ObjDir}lcode.c.o ¶
+	{ObjDir}lgc.c.o {ObjDir}lstate.c.o {ObjDir}ltm.c.o ¶
+	{ObjDir}tolua_eh.c.o {ObjDir}tolua_tt.c.o {ObjDir}ldblib.c.o ¶
+	{ObjDir}llex.c.o {ObjDir}lstring.c.o {ObjDir}lundump.c.o ¶
+	{ObjDir}tolua_gp.c.o
+
+ToLuaObjs = ¶
+	{ObjDir}tolua.c.o {ObjDir}tolualua.c.o {ObjDir}liolib.c.o ¶
+	{Objects2}
+
+Objects1 = ¶
+	{ObjDir}tables.c.o {ObjDir}variable.c.o ¶
+	{ObjDir}z-rand.c.o {ObjDir}z-virt.c.o {ObjDir}z-util.c.o ¶
+	{ObjDir}z-form.c.o {ObjDir}z-term.c.o ¶
+	{Objects2} ¶
+	{ObjDir}l-monst.c.o {ObjDir}l-object.c.o {ObjDir}l-player.c.o ¶
+	{ObjDir}l-random.c.o {ObjDir}l-ui.c.o {ObjDir}l-misc.c.o ¶
+	{ObjDir}l-spell.c.o ¶
+	{ObjDir}randart.c.o {ObjDir}script.c.o {ObjDir}util.c.o ¶
+	{ObjDir}cave.c.o {ObjDir}dungeon.c.o ¶
+	{ObjDir}melee1.c.o {ObjDir}melee2.c.o ¶
+	{ObjDir}xtra1.c.o {ObjDir}xtra2.c.o ¶
+	{ObjDir}object1.c.o {ObjDir}object2.c.o {ObjDir}obj-info.c.o ¶
+	{ObjDir}monster1.c.o {ObjDir}monster2.c.o ¶
+	{ObjDir}spells1.c.o {ObjDir}spells2.c.o ¶
+	{ObjDir}files.c.o {ObjDir}save.c.o ¶
+	{ObjDir}cmd1.c.o {ObjDir}cmd2.c.o {ObjDir}cmd3.c.o {ObjDir}cmd4.c.o ¶
+	{ObjDir}cmd5.c.o {ObjDir}cmd6.c.o ¶
+	{ObjDir}use-obj.c.o {ObjDir}x-spell.c.o ¶
+	{ObjDir}generate.c.o {ObjDir}store.c.o {ObjDir}wizard2.c.o ¶
+	{ObjDir}init2.c.o {ObjDir}load.c.o {ObjDir}birth.c.o ¶
+	{ObjDir}init1.c.o {ObjDir}wizard1.c.o
+
+Objects = {ObjDir}main-mac.c.o {Objects1}
+ObjectsCarb = {ObjDir}main-crb.c.o {Objects1}
+
+##
+## Compiler options
+##
+
+DefsClassic = -d MACINTOSH -d MAC_MPW
+DefsCarbon  = -d MACINTOSH -d MAC_MPW -d CARBON -d TARGET_API_MAC_CARBON=1
+
+# PowerPC code generation (-target ppc)
+# Allow use of Unix pathnames in names of headers (-includes unix)
+# Somewhat relaxed ANSI enforcement (-ansi relaxed)
+# Turn hyper-strict type checking off (-typecheck relaxed)
+COptsPPC = -target ppc -includes unix -ansi relaxed -typecheck relaxed -sym off
+
+# Optimise for speed (for files containing bottleneck routines)
+COptsOptPPC = -opt speed {COptsPPC}
+
+CFlagsPPC     = {COptsPPC} {DefsClassic}
+CFlagsOptPPC  = {COptsOptPPC} {DefsClassic}
+CFlagsCarb    = {COptsPPC} {DefsCarbon}
+CFlagsOptCarb = {COptsOptPPC} {DefsCarbon}
+
+# 68020 code generation (-mc68020)
+# 32 bit relocatable references for both code and data (-model far)
+# Mac 68K memory alignment (-align mac68k)
+# Allow unix style pathnames in header names (-includes unix)
+# Somewhat relaxed ANSI enforcement (-ansi relaxed)
+# Generate PC-relative strings and functions, also try to merge
+# the same string constants (-b2)
+COpts68K = -mc68020 -model far -align mac68k -includes unix ¶
+	-ansi relaxed -typecheck relaxed -b2 -sym off
+
+# Though the SC recommends us to use optimise for space by default,
+# it hangs on larger l-*.c files...
+
+# Optimise for speed (for files containing bottleneck routines)
+COptsOpt68K = -opt speed {COpts68K}
+
+CFlags68K    = {COpts68K} {DefsClassic}
+CFlagsOpt68K = {COptsOpt68K} {DefsClassic}
+
+##
+## Abstract rules to generate real makefiles
+##
+CFlags =
+CFlagsOpt =
+
+AngbandPPC Ä $OutOfDate
+	Begin
+		Echo 'Set Echo 1'
+		Make {AngbandPPC} ¶
+			-f {Makefile} ¶
+			-d C={PPCC} ¶
+			-d CFlags="{CFlagsPPC}" ¶
+			-d CFlagsOpt="{CFlagsOptPPC}" ¶
+			-d ObjDir={ObjDirPPC}
+	End > {AngbandPPC}.cmd
+	{AngbandPPC}.cmd
+	Delete {AngbandPPC}.cmd
+	Move -y {AngbandPPC} ::
+
+AngbandCarb Ä $OutOfDate
+	Begin
+		Echo 'Set Echo 1'
+		Make {AngbandCarb} ¶
+			-f {Makefile} ¶
+			-d C={PPCC} ¶
+			-d CFlags="{CFlagsCarb}" ¶
+			-d CFlagsOpt="{CFlagsOptCarb}" ¶
+			-d ObjDir={ObjDirCarb}
+	End > {AngbandCarb}.cmd
+	{AngbandCarb}.cmd
+	Delete {AngbandCarb}.cmd
+	Move -y {AngbandCarb} ::
+
+Angband68K Ä $OutOfDate
+	Begin
+		Echo 'Set Echo 1'
+		Make {Angband68K} ¶
+			-f {Makefile} ¶
+			-d C={C} ¶
+			-d CFlags="{CFlags68K}" ¶
+			-d CFlagsOpt="{CFlagsOpt68K}" ¶
+			-d ObjDir={ObjDir68K} ¶
+			{SegOpts}
+	End > {Angband68K}.cmd
+	{Angband68K}.cmd
+	Delete {Angband68K}.cmd
+	Move -y {Angband68K} ::
+
+ToLuaTool Ä $OutOfDate
+	Begin
+		Echo 'Set Echo 1'
+		Make {ToLua} ¶
+			-f {Makefile} ¶
+			-d C={PPCC} ¶
+			-d CFlags="{CFlagsPPC}" ¶
+			-d CFlagsOpt="{CFlagsOptPPC}" ¶
+			-d ObjDir={ObjDirMPW}
+	End > {ToLua}.cmd
+	{ToLua}.cmd
+	Delete {ToLua}.cmd
+
+##
+## Linker options
+##
+
+# File creator for most *band is 'A271' (-c 'A271')
+# File type is 'APPL', because it's an application (-t 'APPL')
+AngbandSig = -c A271 -t APPL
+
+# ToLua is built as an MPW Tool, hence
+ToolSig = -c 'MPS ' -t MPST
+
+# Carbon targets use a different entry point
+LOptsCarb = -m __appstart
+
+# Linker options for PPC targets
+LFlagsPPC = {AngbandSig}
+LFlagsCarb = {AngbandSig} {LOptsCarb}
+LFlagsMPW = {ToolSig}
+
+# The 68K linker has many options...
+
+# Compat the output file's resource fork (-compact)
+# 32 bit relocatable references for both code and data (-model far)
+# Generate 68020 branch islands where needed (-br 020)
+LOpts68K = -compact -model far -br 020
+
+# (68K) Names of 'CODE' resource segments
+# You can do without segmenting your program, but this is the way
+# the official 68K binaries were compiled for 2.7.x--2.8.3.
+Seg01 = 'Main'
+Seg02 = 'Basic'
+Seg03 = 'Randart'
+Seg04 = 'Script'
+Seg05 = 'Util'
+Seg06 = 'Cave'
+Seg07 = 'Dungeon'
+Seg08 = 'Melee'
+Seg09 = 'Xtra'
+Seg10 = 'Object'
+Seg11 = 'Monster'
+Seg12 = 'Spells'
+Seg13 = 'Files'
+Seg14 = 'Save'
+Seg15 = 'Lua'
+Seg16 = 'Commands'
+Seg17 = 'Realms'
+Seg18 = 'Items'
+Seg19 = 'Generate'
+Seg20 = 'Store'
+Seg21 = 'Wizard2'
+Seg22 = 'Init2'
+Seg23 = 'Load'
+Seg24 = 'Birth'
+Seg25 = 'Init1'
+Seg26 = 'Wizard1'
+Seg27 = 'Tolua (Monsters)'
+Seg28 = 'Tolua (Objects)'
+Seg29 = 'Tolua (Player)'
+Seg30 = 'Tolua (Random)'
+Seg31 = 'Tolua (UI)'
+Seg32 = 'Tolua (Misc)'
+Seg33 = 'Tolua (Spell)'
+
+# (To have 68K and PPC targets together in a file)
+# Compiler option to set segment names -- the preferred way (from MPW 68K
+# compiler's viewpoint) to do this is putting #pragma in each file.
+# Of course, this is not *our* preferences, but we can't use the default
+# rule this way :(
+SegOpt01=
+SegOpt02=
+SegOpt03=
+SegOpt04=
+SegOpt05=
+SegOpt06=
+SegOpt07=
+SegOpt08=
+SegOpt09=
+SegOpt10=
+SegOpt11=
+SegOpt12=
+SegOpt13=
+SegOpt14=
+SegOpt15=
+SegOpt16=
+SegOpt17=
+SegOpt18=
+SegOpt19=
+SegOpt20=
+SegOpt21=
+SegOpt22=
+SegOpt23=
+SegOpt24=
+SegOpt25=
+SegOpt26=
+SegOpt27=
+SegOpt28=
+SegOpt29=
+SegOpt30=
+SegOpt31=
+SegOpt32=
+SegOpt33=
+
+# (68K) The 68K needs a compile-time option to set segment names
+# appropriately, or the game would use one big Main segment, which
+# will be preload, protected and locked -- a bad news for old machines.
+SegOpts = ¶
+	-d SegOpt01="-s {Seg01}" ¶
+	-d SegOpt02="-s {Seg02}" ¶
+	-d SegOpt03="-s {Seg03}" ¶
+	-d SegOpt04="-s {Seg04}" ¶
+	-d SegOpt05="-s {Seg05}" ¶
+	-d SegOpt06="-s {Seg06}" ¶
+	-d SegOpt07="-s {Seg07}" ¶
+	-d SegOpt08="-s {Seg08}" ¶
+	-d SegOpt09="-s {Seg09}" ¶
+	-d SegOpt10="-s {Seg10}" ¶
+	-d SegOpt11="-s {Seg11}" ¶
+	-d SegOpt12="-s {Seg12}" ¶
+	-d SegOpt13="-s {Seg13}" ¶
+	-d SegOpt14="-s {Seg14}" ¶
+	-d SegOpt15="-s {Seg15}" ¶
+	-d SegOpt16="-s {Seg16}" ¶
+	-d SegOpt17="-s {Seg17}" ¶
+	-d SegOpt18="-s {Seg18}" ¶
+	-d SegOpt19="-s {Seg19}" ¶
+	-d SegOpt20="-s {Seg20}" ¶
+	-d SegOpt21="-s {Seg21}" ¶
+	-d SegOpt22="-s {Seg22}" ¶
+	-d SegOpt23="-s {Seg23}" ¶
+	-d SegOpt24="-s {Seg24}" ¶
+	-d SegOpt25="-s {Seg25}" ¶
+	-d SegOpt26="-s {Seg26}" ¶
+	-d SegOpt27="-s {Seg27}" ¶
+	-d SegOpt28="-s {Seg28}" ¶
+	-d SegOpt29="-s {Seg29}" ¶
+	-d SegOpt30="-s {Seg30}" ¶
+	-d SegOpt31="-s {Seg31}" ¶
+	-d SegOpt32="-s {Seg32}" ¶
+	-d SegOpt33="-s {Seg33}"
+
+# (68K) 'CODE' resource segment flags
+# preload,protected,locked = resident segments
+# protected,purgeable = transient segments
+#
+# A purgeable segment, unlike paging, does not remember
+# the values of its "static" variables when it's purged and
+# reload.  That's why game status variables were grouped into
+# variable.c.
+Segs = ¶
+	-ra {Seg01}=preload,protected,locked ¶
+	-ra {Seg02}=preload,protected,locked ¶
+	-ra {Seg03}=preload,protected,locked ¶
+	-ra {Seg04}=preload,protected,locked ¶
+	-ra {Seg05}=preload,protected,locked ¶
+	-ra {Seg06}=preload,protected,locked ¶
+	-ra {Seg07}=protected,purgeable ¶
+	-ra {Seg08}=protected,purgeable ¶
+	-ra {Seg09}=protected,purgeable ¶
+	-ra {Seg10}=protected,purgeable ¶
+	-ra {Seg11}=protected,purgeable ¶
+	-ra {Seg12}=protected,purgeable ¶
+	-ra {Seg13}=protected,purgeable ¶
+	-ra {Seg14}=protected,purgeable ¶
+	-ra {Seg15}=protected,purgeable ¶
+	-ra {Seg16}=protected,purgeable ¶
+	-ra {Seg17}=protected,purgeable ¶
+	-ra {Seg18}=protected,purgeable ¶
+	-ra {Seg19}=protected,purgeable ¶
+	-ra {Seg20}=protected,purgeable ¶
+	-ra {Seg21}=protected,purgeable ¶
+	-ra {Seg22}=protected,purgeable ¶
+	-ra {Seg23}=protected,purgeable ¶
+	-ra {Seg24}=protected,purgeable ¶
+	-ra {Seg25}=protected,purgeable ¶
+	-ra {Seg26}=protected,purgeable ¶
+	-ra {Seg27}=protected,purgeable ¶
+	-ra {Seg28}=protected,purgeable ¶
+	-ra {Seg29}=protected,purgeable ¶
+	-ra {Seg30}=protected,purgeable ¶
+	-ra {Seg31}=protected,purgeable ¶
+	-ra {Seg32}=protected,purgeable ¶
+	-ra {Seg33}=protected,purgeable
+
+# And we can finally define this
+LFlags68K = {AngbandSig} {LOpts68K} {Segs}
+
+##
+## Libraries
+##
+
+# The set of libraries for PEF PPC applications
+# using standard C library
+# NavigationLib is used by the new folder code
+# (not in the standard main-mac.c)
+LibsPPC = ¶
+	"{SharedLibraries}"InterfaceLib ¶
+	"{SharedLibraries}"NavigationLib ¶
+	"{SharedLibraries}"StdCLib ¶
+	"{SharedLibraries}"MathLib ¶
+	"{PPCLibraries}"StdCRuntime.o ¶
+	"{PPCLibraries}"PPCCRuntime.o
+
+# Standard set of libraries for PEF Carbon applications using
+# standard C library
+LibsCarb = ¶
+	"{PPCLibraries}"CarbonStdCLib.o ¶
+	"{PPCLibraries}"StdCRuntime.o ¶
+	"{PPCLibraries}"PPCCRuntime.o ¶
+	"{SharedLibraries}"CarbonLib ¶
+	"{SharedLibraries}"StdCLib
+
+# The set of libraries for Classic 68K applications
+# using standard C library -- please note that the 'far' model
+# requires libraries built for it in some cases.
+Libs68K = ¶
+	"{Libraries}"MacRuntime.o ¶
+	"{Libraries}"Interface.o ¶
+	"{Libraries}"IntEnv.far.o ¶
+	"{CLibraries}"StdCLib.far.o ¶
+	"{Libraries}"MathLib.far.o
+
+# The set of libraries for command line MPW tools.
+# ToLua is always built as a PEF PPC binary, because MPW itself is.
+LibsMPW = ¶
+	"{SharedLibraries}"InterfaceLib ¶
+	"{SharedLibraries}"StdCLib ¶
+	"{PPCLibraries}"StdCRuntime.o ¶
+	"{PPCLibraries}"PPCCRuntime.o
+
+##
+## Low level targets
+##
+
+#
+# PPC PEF (Classic)
+#
+{AngbandPPC} ÄÄ {Objects}
+	PPCLink {Objects} {LibsPPC} -o {AngbandPPC} {LFlagsPPC}
+
+# Uncomment these lines if you have graphics and sound data ready
+{AngbandPPC} ÄÄ {AngbandPPC} {Sounds}
+	DeRez -only 'snd ' {Sounds} | Rez -append -o {AngbandPPC}
+
+{AngbandPPC} ÄÄ {AngbandPPC} {Tiles_Original}
+	DeRez -only 'PICT' {Tiles_Original} | Rez -append -o {AngbandPPC}
+
+{AngbandPPC} ÄÄ {AngbandPPC} {Tiles_Adam_Bolt}
+	DeRez -only 'PICT' {Tiles_Adam_Bolt} | Rez -append -o {AngbandPPC}
+
+# Attach menus, dialogues, icons and some other essential resources
+{AngbandPPC} ÄÄ {AngbandPPC} {Resources}
+	Rez {DefsClassic} -append -o {AngbandPPC} {Resources}
+
+#
+# PEF Carbon
+#
+{AngbandCarb} ÄÄ {ObjectsCarb}
+	PPCLink {ObjectsCarb} {LibsCarb} -o {AngbandCarb} {LFlagsCarb}
+
+# Uncomment these lines if you have graphics and sound data ready
+{AngbandCarb} ÄÄ {AngbandCarb} {Sounds}
+	DeRez -only 'snd ' {Sounds} | Rez -append -o {AngbandCarb}
+
+{AngbandCarb} ÄÄ {AngbandCarb} {Tiles_Original}
+	DeRez -only 'PICT' {Tiles_Original} | Rez -append -o {AngbandCarb}
+
+{AngbandCarb} ÄÄ {AngbandCarb} {Tiles_Adam_Bolt}
+	DeRez -only 'PICT' {Tiles_Adam_Bolt} | Rez -append -o {AngbandCarb}
+
+# Attach menus, dialogues, icons and some other essential resources
+{AngbandCarb} ÄÄ {AngbandCarb} {Resources}
+	Rez {DefsCarbon} -append -o {AngbandCarb} {Resources}
+
+#
+# Classic 68K
+#
+{Angband68K} ÄÄ {Objects}
+	ILink {Objects} {Libs68K} -o {Angband68K} {LFlags68K}
+
+# Uncomment these lines if you have graphics and sound data ready
+{Angband68K} ÄÄ {Angband68K} {Sounds}
+	DeRez -only 'snd ' {Sounds} | Rez -append -o {Angband68K}
+
+{Angband68K} ÄÄ {Angband68K} {Tiles_Original}
+	DeRez -only 'PICT' {Tiles_Original} | Rez -append -o {Angband68K}
+
+{Angband68K} ÄÄ {Angband68K} {Tiles_Adam_Bolt}
+	DeRez -only 'PICT' {Tiles_Adam_Bolt} | Rez -append -o {Angband68K}
+
+# Attach menus, dialogues, icons and some other essential resources
+{Angband68K} ÄÄ {Angband68K} {Resources}
+	Rez {DefsClassic} -append -o {Angband68K} {Resources}
+
+#
+# Tolua is built as a PEF PPC MPW Tool, because MPW itself is so.
+#
+{ToLua} ÄÄ {ToLuaObjs}
+	PPCLink {ToLuaObjs} {LibsMPW} -o {ToLua} {LFlagsMPW}
+
+##
+## File-level rules
+##
+
+# Lua stub files
+l-misc.c Ä l-misc.pkg
+	{ToLua} -n misc -o l-misc.c l-misc.pkg
+l-monst.c Ä l-monst.pkg
+	{ToLua} -n monster -o l-monst.c l-monst.pkg
+l-object.c Ä l-object.pkg
+	{ToLua} -n object -o l-object.c l-object.pkg
+l-player.c Ä l-player.pkg
+	{ToLua} -n player -o l-player.c l-player.pkg
+l-random.c Ä l-random.pkg
+	{ToLua} -n random -o l-random.c l-random.pkg
+l-spell.c Ä l-spell.pkg
+	{ToLua} -n spell -o l-spell.c l-spell.pkg
+l-ui.c Ä l-ui.pkg
+	{ToLua} -n ui -o l-ui.c l-ui.pkg
+
+# Default rules of make don't work well with multi-target cross-compiliation.
+#
+# Only files containing bottleneck functions are compiled with
+# optimizer options set.  MPW compilers can die, or worse, crash
+# your system if they try to optimise large files.
+# Those -opt options set *global* optimisations and locall optimisations
+# are still performed unless you set -sym on, so this shouldn't matter
+# a lot.
+
+# Seg01 = 'Main'
+{ObjDir}main-mac.c.o Ä main-mac.c
+	{C} main-mac.c -o {ObjDir}main-mac.c.o {CFlags} {SegOpt01}
+{ObjDir}tables.c.o Ä tables.c
+	{C} tables.c -o {ObjDir}tables.c.o {CFlags} {SegOpt01}
+{ObjDir}variable.c.o Ä variable.c
+	{C} variable.c -o {ObjDir}variable.c.o {CFlags} {SegOpt01}
+
+# Seg02 = 'Basic'
+{ObjDir}z-rand.c.o Ä z-rand.c
+	{C} z-rand.c -o {ObjDir}z-rand.c.o {CFlagsOpt} {SegOpt02}
+{ObjDir}z-virt.c.o Ä z-virt.c
+	{C} z-virt.c -o {ObjDir}z-virt.c.o {CFlags} {SegOpt02}
+{ObjDir}z-util.c.o Ä z-util.c
+	{C} z-util.c -o {ObjDir}z-util.c.o {CFlags} {SegOpt02}
+{ObjDir}z-form.c.o Ä z-form.c
+	{C} z-form.c -o {ObjDir}z-form.c.o {CFlags} {SegOpt02}
+{ObjDir}z-term.c.o Ä z-term.c
+	{C} z-term.c -o {ObjDir}z-term.c.o {CFlags} {SegOpt02}
+
+# Seg03 = 'Randart'
+{ObjDir}randart.c.o Ä randart.c
+	{C} randart.c -o {ObjDir}randart.c.o {CFlags} {SegOpt03}
+
+# Seg04 = 'Script'
+{ObjDir}script.c.o Ä script.c
+	{C} script.c -o {ObjDir}script.c.o {CFlags} {SegOpt04}
+
+# Seg05 = 'Util'
+{ObjDir}util.c.o Ä util.c
+	{C} util.c -o {ObjDir}util.c.o {CFlags} {SegOpt05}
+
+# Seg06 = 'Cave'
+{ObjDir}cave.c.o Ä cave.c
+	{C} cave.c -o {ObjDir}cave.c.o {CFlagsOpt} {SegOpt06}
+
+# Seg07 = 'Dungeon'
+{ObjDir}dungeon.c.o Ä dungeon.c
+	{C} dungeon.c -o {ObjDir}dungeon.c.o {CFlagsOpt} {SegOpt07}
+
+# Seg08 = 'Melee'
+{ObjDir}melee1.c.o Ä melee1.c
+	{C} melee1.c -o {ObjDir}melee1.c.o {CFlagsOpt} {SegOpt08}
+{ObjDir}melee2.c.o Ä melee2.c
+	{C} melee2.c -o {ObjDir}melee2.c.o {CFlagsOpt} {SegOpt08}
+
+# Seg09 = 'Xtra'
+{ObjDir}xtra1.c.o Ä xtra1.c
+	{C} xtra1.c -o {ObjDir}xtra1.c.o {CFlags} {SegOpt09}
+{ObjDir}xtra2.c.o Ä xtra2.c
+	{C} xtra2.c -o {ObjDir}xtra2.c.o {CFlags} {SegOpt09}
+
+# Seg10 = 'Object'
+{ObjDir}object1.c.o Ä object1.c
+	{C} object1.c -o {ObjDir}object1.c.o {CFlags} {SegOpt10}
+{ObjDir}object2.c.o Ä object2.c
+	{C} object2.c -o {ObjDir}object2.c.o {CFlags} {SegOpt10}
+{ObjDir}obj-info.c.o Ä obj-info.c
+	{C} obj-info.c -o {ObjDir}obj-info.c.o {CFlags} {SegOpt10}
+
+# Seg11 = 'Monster'
+{ObjDir}monster1.c.o Ä monster1.c
+	{C} monster1.c -o {ObjDir}monster1.c.o {CFlags} {SegOpt11}
+{ObjDir}monster2.c.o Ä monster2.c
+	{C} monster2.c -o {ObjDir}monster2.c.o {CFlags} {SegOpt11}
+
+# Seg12 = 'Spells'
+{ObjDir}spells1.c.o Ä spells1.c
+	{C} spells1.c -o {ObjDir}spells1.c.o {CFlags} {SegOpt12}
+{ObjDir}spells2.c.o Ä spells2.c
+	{C} spells2.c -o {ObjDir}spells2.c.o {CFlags} {SegOpt12}
+
+# Seg13 = 'Files'
+{ObjDir}files.c.o Ä files.c
+	{C} files.c -o {ObjDir}files.c.o {CFlags} {SegOpt13}
+
+# Seg14 = 'Save'
+{ObjDir}save.c.o Ä save.c
+	{C} save.c -o {ObjDir}save.c.o {CFlags} {SegOpt14}
+
+# Seg15 = 'Lua (engine)'
+{ObjDir}lapi.c.o Ä :lua:lapi.c
+	{C} :lua:lapi.c -o {ObjDir}lapi.c.o {CFlags} {SegOpt15}
+{ObjDir}ldebug.c.o Ä :lua:ldebug.c
+	{C} :lua:ldebug.c -o {ObjDir}ldebug.c.o {CFlags} {SegOpt15}
+{ObjDir}lmem.c.o Ä :lua:lmem.c
+	{C} :lua:lmem.c -o {ObjDir}lmem.c.o {CFlags} {SegOpt15}
+{ObjDir}lstrlib.c.o Ä :lua:lstrlib.c
+	{C} :lua:lstrlib.c -o {ObjDir}lstrlib.c.o {CFlags} {SegOpt15}
+{ObjDir}lvm.c.o Ä :lua:lvm.c
+	{C} :lua:lvm.c -o {ObjDir}lvm.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_lb.c.o Ä :lua:tolua_lb.c
+	{C} :lua:tolua_lb.c -o {ObjDir}tolua_lb.c.o {CFlags} {SegOpt15}
+{ObjDir}lauxlib.c.o Ä :lua:lauxlib.c
+	{C} :lua:lauxlib.c -o {ObjDir}lauxlib.c.o {CFlags} {SegOpt15}
+{ObjDir}ldo.c.o Ä :lua:ldo.c
+	{C} :lua:ldo.c -o {ObjDir}ldo.c.o {CFlags} {SegOpt15}
+{ObjDir}lobject.c.o Ä :lua:lobject.c
+	{C} :lua:lobject.c -o {ObjDir}lobject.c.o {CFlags} {SegOpt15}
+{ObjDir}ltable.c.o Ä :lua:ltable.c
+	{C} :lua:ltable.c -o {ObjDir}ltable.c.o {CFlags} {SegOpt15}
+{ObjDir}lzio.c.o Ä :lua:lzio.c
+	{C} :lua:lzio.c -o {ObjDir}lzio.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_rg.c.o Ä :lua:tolua_rg.c
+	{C} :lua:tolua_rg.c -o {ObjDir}tolua_rg.c.o {CFlags} {SegOpt15}
+{ObjDir}lbaselib.c.o Ä :lua:lbaselib.c
+	{C} :lua:lbaselib.c -o {ObjDir}lbaselib.c.o {CFlags} {SegOpt15}
+{ObjDir}lfunc.c.o Ä :lua:lfunc.c
+	{C} :lua:lfunc.c -o {ObjDir}lfunc.c.o {CFlags} {SegOpt15}
+{ObjDir}lparser.c.o Ä :lua:lparser.c
+	{C} :lua:lparser.c -o {ObjDir}lparser.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_bd.c.o Ä :lua:tolua_bd.c
+	{C} :lua:tolua_bd.c -o {ObjDir}tolua_bd.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_tm.c.o Ä :lua:tolua_tm.c
+	{C} :lua:tolua_tm.c -o {ObjDir}tolua_tm.c.o {CFlags} {SegOpt15}
+{ObjDir}lcode.c.o Ä :lua:lcode.c
+	{C} :lua:lcode.c -o {ObjDir}lcode.c.o {CFlags} {SegOpt15}
+{ObjDir}lgc.c.o Ä :lua:lgc.c
+	{C} :lua:lgc.c -o {ObjDir}lgc.c.o {CFlags} {SegOpt15}
+{ObjDir}lstate.c.o Ä :lua:lstate.c
+	{C} :lua:lstate.c -o {ObjDir}lstate.c.o {CFlags} {SegOpt15}
+{ObjDir}ltm.c.o Ä :lua:ltm.c
+	{C} :lua:ltm.c -o {ObjDir}ltm.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_eh.c.o Ä :lua:tolua_eh.c
+	{C} :lua:tolua_eh.c -o {ObjDir}tolua_eh.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_tt.c.o Ä :lua:tolua_tt.c
+	{C} :lua:tolua_tt.c -o {ObjDir}tolua_tt.c.o {CFlags} {SegOpt15}
+{ObjDir}ldblib.c.o Ä :lua:ldblib.c
+	{C} :lua:ldblib.c -o {ObjDir}ldblib.c.o {CFlags} {SegOpt15}
+{ObjDir}llex.c.o Ä :lua:llex.c
+	{C} :lua:llex.c -o {ObjDir}llex.c.o {CFlags} {SegOpt15}
+{ObjDir}lstring.c.o Ä :lua:lstring.c
+	{C} :lua:lstring.c -o {ObjDir}lstring.c.o {CFlags} {SegOpt15}
+{ObjDir}lundump.c.o Ä :lua:lundump.c
+	{C} :lua:lundump.c -o {ObjDir}lundump.c.o {CFlags} {SegOpt15}
+{ObjDir}tolua_gp.c.o Ä :lua:tolua_gp.c
+	{C} :lua:tolua_gp.c -o {ObjDir}tolua_gp.c.o {CFlags} {SegOpt15}
+
+# Seg16 = 'Commands'
+{ObjDir}cmd1.c.o Ä cmd1.c
+	{C} cmd1.c -o {ObjDir}cmd1.c.o {CFlags} {SegOpt16}
+{ObjDir}cmd2.c.o Ä cmd2.c
+	{C} cmd2.c -o {ObjDir}cmd2.c.o {CFlags} {SegOpt16}
+{ObjDir}cmd3.c.o Ä cmd3.c
+	{C} cmd3.c -o {ObjDir}cmd3.c.o {CFlags} {SegOpt16}
+{ObjDir}cmd4.c.o Ä cmd4.c
+	{C} cmd4.c -o {ObjDir}cmd4.c.o {CFlags} {SegOpt16}
+
+# Seg17 = 'Realms'
+{ObjDir}cmd5.c.o Ä cmd5.c
+	{C} cmd5.c -o {ObjDir}cmd5.c.o {CFlags} {SegOpt17}
+{ObjDir}x-spell.c.o Ä x-spell.c
+	{C} x-spell.c -o {ObjDir}x-spell.c.o {CFlags} {SegOpt17}
+
+# Seg18 = 'Items'
+{ObjDir}cmd6.c.o Ä cmd6.c
+	{C} cmd6.c -o {ObjDir}cmd6.c.o {CFlags} {SegOpt18}
+{ObjDir}use-obj.c.o Ä use-obj.c
+	{C} use-obj.c -o {ObjDir}use-obj.c.o {CFlags} {SegOpt18}
+
+# Seg19 = 'Generate'
+{ObjDir}generate.c.o Ä generate.c
+	{C} generate.c -o {ObjDir}generate.c.o {CFlags} {SegOpt19}
+
+# Seg20 = 'Store'
+{ObjDir}store.c.o Ä store.c
+	{C} store.c -o {ObjDir}store.c.o {CFlags} {SegOpt20}
+
+# Seg21 = 'Wizard2'
+{ObjDir}wizard2.c.o Ä wizard2.c
+	{C} wizard2.c -o {ObjDir}wizard2.c.o {CFlags} {SegOpt21}
+
+# Seg22 = 'Init2'
+{ObjDir}init2.c.o Ä init2.c
+	{C} init2.c -o {ObjDir}init2.c.o {CFlags} {SegOpt22}
+
+# Seg23 = 'Load'
+{ObjDir}load.c.o Ä load.c
+	{C} load.c -o {ObjDir}load.c.o {CFlags} {SegOpt23}
+
+# Seg24 = 'Birth'
+{ObjDir}birth.c.o Ä birth.c
+	{C} birth.c -o {ObjDir}birth.c.o {CFlags} {SegOpt24}
+
+# Seg25 = 'Init1'
+{ObjDir}init1.c.o Ä init1.c
+	{C} init1.c -o {ObjDir}init1.c.o {CFlags} {SegOpt25}
+
+# Seg26 = 'Wizard1'
+{ObjDir}wizard1.c.o Ä wizard1.c
+	{C} wizard1.c -o {ObjDir}wizard1.c.o {CFlags} {SegOpt26}
+
+# Seg27 = 'Tolua (Monsters)'
+{ObjDir}l-monst.c.o Ä l-monst.c
+	{C} l-monst.c -o {ObjDir}l-monst.c.o {CFlags} {SegOpt27}
+
+# Seg28 = 'Tolua (Objects)'
+{ObjDir}l-object.c.o Ä l-object.c
+	{C} l-object.c -o {ObjDir}l-object.c.o {CFlags} {SegOpt28}
+
+# Seg29 = 'Tolua (Player)'
+{ObjDir}l-player.c.o Ä l-player.c
+	{C} l-player.c -o {ObjDir}l-player.c.o {CFlags} {SegOpt29}
+
+# Seg30 = 'Tolua (Random)'
+{ObjDir}l-random.c.o Ä l-random.c
+	{C} l-random.c -o {ObjDir}l-random.c.o {CFlags} {SegOpt30}
+
+# Seg31 = 'Tolua (UI)'
+{ObjDir}l-ui.c.o Ä l-ui.c
+	{C} l-ui.c -o {ObjDir}l-ui.c.o {CFlags} {SegOpt31}
+
+# Seg32 = 'Tolua (Misc)'
+{ObjDir}l-misc.c.o Ä l-misc.c
+	{C} l-misc.c -o {ObjDir}l-misc.c.o {CFlags} {SegOpt32}
+
+# Seg33 = 'Tolua (Spell)'
+{ObjDir}l-spell.c.o Ä l-spell.c
+	{C} l-spell.c -o {ObjDir}l-spell.c.o {CFlags} {SegOpt33}
+
+# Tolua - segment doesn't matter because it's always built as a PPC app.
+{ObjDir}tolua.c.o Ä :lua:tolua.c
+	{C} :lua:tolua.c -o {ObjDir}tolua.c.o {CFlags}
+{ObjDir}tolualua.c.o Ä :lua:tolualua.c
+	{C} :lua:tolualua.c -o {ObjDir}tolualua.c.o {CFlags}
+{ObjDir}liolib.c.o Ä :lua:liolib.c
+	{C} :lua:liolib.c -o {ObjDir}liolib.c.o {CFlags}
+

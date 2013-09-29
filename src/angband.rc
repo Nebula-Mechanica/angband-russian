@@ -1,0 +1,129 @@
+/* File: angband.rc */
+
+ANGBAND MENU
+{
+	POPUP "&Игра"
+	{
+		MENUITEM "&Новая", 100
+		MENUITEM "&Открыть...", 101
+		MENUITEM SEPARATOR
+		MENUITEM "&Сохранить", 110
+		MENUITEM SEPARATOR
+		MENUITEM "В&ыход", 130
+	}
+
+	POPUP "&Окна"
+	{
+		POPUP "&Видимость"
+		{
+			MENUITEM "Окно 0", 200
+			MENUITEM "Окно 1", 201
+			MENUITEM "Окно 2", 202
+			MENUITEM "Окно 3", 203
+			MENUITEM "Окно 4", 204
+			MENUITEM "Окно 5", 205
+			MENUITEM "Окно 6", 206
+			MENUITEM "Окно 7", 207
+		}
+
+		POPUP "&Шрифт"
+		{
+			MENUITEM "Окно 0", 210
+			MENUITEM "Окно 1", 211
+			MENUITEM "Окно 2", 212
+			MENUITEM "Окно 3", 213
+			MENUITEM "Окно 4", 214
+			MENUITEM "Окно 5", 215
+			MENUITEM "Окно 6", 216
+			MENUITEM "Окно 7", 217
+		}
+
+		MENUITEM SEPARATOR
+
+		POPUP "Специальный вывод"
+		{
+			MENUITEM "Окно 0", 230
+			MENUITEM "Окно 1", 231
+			MENUITEM "Окно 2", 232
+			MENUITEM "Окно 3", 233
+			MENUITEM "Окно 4", 234
+			MENUITEM "Окно 5", 235
+			MENUITEM "Окно 6", 236
+			MENUITEM "Окно 7", 237
+		}
+
+		POPUP "Увеличить ширину клетки"
+		{
+			MENUITEM "Окно 0", 240
+			MENUITEM "Окно 1", 241
+			MENUITEM "Окно 2", 242
+			MENUITEM "Окно 3", 243
+			MENUITEM "Окно 4", 244
+			MENUITEM "Окно 5", 245
+			MENUITEM "Окно 6", 246
+			MENUITEM "Окно 7", 247
+		}
+
+		POPUP "Уменьшить ширину клетки"
+		{
+			MENUITEM "Окно 0", 250
+			MENUITEM "Окно 1", 251
+			MENUITEM "Окно 2", 252
+			MENUITEM "Окно 3", 253
+			MENUITEM "Окно 4", 254
+			MENUITEM "Окно 5", 255
+			MENUITEM "Окно 6", 256
+			MENUITEM "Окно 7", 257
+		}
+
+		POPUP "Увеличить высоту клетки"
+		{
+			MENUITEM "Окно 0", 260
+			MENUITEM "Окно 1", 261
+			MENUITEM "Окно 2", 262
+			MENUITEM "Окно 3", 263
+			MENUITEM "Окно 4", 264
+			MENUITEM "Окно 5", 265
+			MENUITEM "Окно 6", 266
+			MENUITEM "Окно 7", 267
+		}
+
+		POPUP "Уменьшить высоту клетки"
+		{
+			MENUITEM "Окно 0", 270
+			MENUITEM "Окно 1", 271
+			MENUITEM "Окно 2", 272
+			MENUITEM "Окно 3", 273
+			MENUITEM "Окно 4", 274
+			MENUITEM "Окно 5", 275
+			MENUITEM "Окно 6", 276
+			MENUITEM "Окно 7", 277
+		}
+	}
+
+	POPUP "&Прочее"
+	{
+		POPUP "&Графика"
+		{
+			MENUITEM "&Нет", 400
+			MENUITEM "&Старая (8x8)", 401
+			MENUITEM "&Адам Болт (16x16)", 402
+			MENUITEM "&Дэвид Гервэйс (32x32)", 403
+			MENUITEM "&Удвоенная ширина", 409
+		}
+
+		MENUITEM "&Звук", 410
+		MENUITEM SEPARATOR
+		MENUITEM "Пониженный приоритет", 420
+		MENUITEM "Заставка", 430
+		MENUITEM "&Карта", 440
+	}
+
+	POPUP "&Справка"
+	{
+		MENUITEM "&Вызов справки", 901
+	}
+}
+
+ANGBAND ICON "angband.ico"
+
